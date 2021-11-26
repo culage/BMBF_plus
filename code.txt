@@ -1,0 +1,67 @@
+//■実コード
+
+const CONFIG_API_URL = "/host/beatsaber/config";
+
+// Config取得
+async function GetConfigApi() {
+	var response = await fetch(CONFIG_API_URL, {
+		method: 'GET',
+		cache: 'no-cache',
+	});
+	return await response.json();
+}
+
+// Config反映
+async function PutConfigApi(putJson) {
+	return await fetch(CONFIG_API_URL, {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(putJson.Config)
+	});
+}
+
+// 曲リスト位置調整
+document.querySelector(".outer-container").style.marginTop = "0px";
+
+// 機能UI追加
+document.querySelector("div.title-message").innerHTML = `
+  <button id="btnDigupUnlist">Dig up Unlist</button>
+`;
+
+// プレイリスト未登録曲を上に移動
+var btnDigupUnlist = document.querySelector("#btnDigupUnlist");
+btnDigupUnlist.addEventListener("click", async function() {
+	
+	btnDigupUnlist.disabled = true;
+	
+	// Config取得
+	var j = await GetConfigApi();
+	
+	// プレイリスト未登録曲を上に移動
+	var playlistHashSet = new Set( j.Config.Playlists.flatMap(playlist=>playlist.SongList.map(song=>song.Hash)) );
+
+	var knownSongsList = Object.entries(j.Config.KnownSongs);
+	var listedSongsList  = knownSongsList.filter(entry=> playlistHashSet.has(entry[1].Hash));
+	var unlistedSongList = knownSongsList.filter(entry=>!playlistHashSet.has(entry[1].Hash));
+	var newKnownSongs = listedSongsList;
+	newKnownSongs.unshift(...unlistedSongList);
+
+	j.Config.KnownSongs = Object.fromEntries(newKnownSongs);
+
+	// Config反映
+	await PutConfigApi(j);
+	
+	alert("Dig up " + unlistedSongList.length + " songs.\n" + "( If it doesn't refresh, switch the tabs at the top. )");
+	
+	btnDigupUnlist.disabled = false;
+});
+
+//Unlisted to Playlist ・未プレイリスト曲をプレイリストに追加する
+//取得api
+//playlist = await ウインドウが閉じられるまで
+//if (playlist == null) { return; }
+//playlist追加
+//更新api
+
