@@ -1,5 +1,6 @@
 //■実コード
 
+//★ApiUtil = {
 const CONFIG_API_URL = "/host/beatsaber/config";
 
 // Config取得
@@ -27,7 +28,8 @@ document.querySelector(".outer-container").style.marginTop = "0px";
 
 // 機能UI追加
 document.querySelector("div.title-message").innerHTML = `
-  <button id="btnDigupUnlist">Dig up Unlist</button>
+  <button id="btnDigupUnlist">Dig up Unlist</button>　
+  <button id="btnRefresh" onclick="location.reload();">Refresh</button>
 `;
 
 // プレイリスト未登録曲を上に移動
@@ -53,7 +55,7 @@ btnDigupUnlist.addEventListener("click", async function() {
 	// Config反映
 	await PutConfigApi(j);
 	
-	alert("Dig up " + unlistedSongList.length + " songs.\n" + "( If it doesn't refresh, switch the tabs at the top. )");
+	alert("Dig up " + unlistedSongList.length + " songs.");
 	
 	btnDigupUnlist.disabled = false;
 });
