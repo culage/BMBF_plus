@@ -14,6 +14,7 @@ PCのBMBF画面の右パネルで上のほうに「未プレイリスト曲」�
 -	・上にサーバ起動しっぱなしのトグルがあることを書く
 	
 	chrome拡張にする
+	http://192.168.2.104:50000/main/playlists
 	
 	discord BMBFch 報告
 
