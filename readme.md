@@ -1,12 +1,13 @@
 BMBFのプレイリスト整理を助けるChrome拡張
 ==========================================================================================
 
-**[Click here for the English readme](english)**
+**[Click here for the English readme](#english)**
 
 これはなに？
 ------------------------------
 
 BMBFにプレイリストを整理ための機能を追加する、PC用のChrome拡張です。**BMBF 1.15.0**に対応しています。
+
 以下の機能を追加します。
 
 - プレイリストに追加されていない曲や、キーワード指定した曲を、「All Installed Songs」一覧の上部に移動させます。
@@ -21,7 +22,7 @@ BMBFにプレイリストを整理ための機能を追加する、PC用のChrom
 
 1. Chromeにこの拡張をインストール
 
-Chromeで「chrome://extensions/」と打ち込んで、拡張機能の管理画面を開いてください。
+PCのChromeで「chrome://extensions/」と打ち込んで、拡張機能の管理画面を開いてください。
 
 右上のトグルスイッチで「デベロッパーモード」を有効にします。
 
@@ -29,9 +30,9 @@ Chromeで「chrome://extensions/」と打ち込んで、拡張機能の管理画
 
 2. BMBFをPCで開く
 
-Chromeで「http://(BMBFのToolsタブに書いてあるIP):50000/」を開きます。
+( Toolsタブの「Toggle Running in Background」ボタンでバックグラウンドでBMBFが動くようにしておきます。 )
 
-Toolsタブの「Toggle Running in Background」ボタンでバックグラウンドでBMBFが動くようにしておきます。
+PCのChromeで「http://(BMBFのToolsタブに書いてあるIP):50000/」を開きます。
 
 Playlistsタブをクリックしてプレイリストを表示し、「F5」キーを押してページを再読込します。
 
@@ -62,6 +63,7 @@ What is this?
 ------------------------------
 
 A Chrome extension for PC that adds the ability to organize playlists to the BMBF. It supports ** BMBF 1.15.0 **.
+
 Add the following functions.
 
 - Move songs that have not been added to the playlist or songs that have specified keywords to the top of the "All Installed Songs" list.
@@ -83,9 +85,9 @@ Drag and drop the downloaded zip into Chrome and install the extension.
 
 2. Open BMBF on your PC
 
-Open "http://(IP written in the Tools tab of BMBF):50000/" in Chrome.
+(Keep the BMBF running in the background with the "Toggle Running in Background" button on the Tools tab.)
 
-Keep the BMBF running in the background with "Toggle Running in Background" button on the Tools tab.
+Open "http://(IP written in the Tools tab of BMBF):50000/" in Chrome.
 
 Click the Playlists tab to view the playlists and press "F5" to reload the page.
 
