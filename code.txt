@@ -34,6 +34,7 @@ document.querySelector(".outer-container").style.marginTop = "0px";
 document.querySelector("div.title-message").innerHTML = `
   <button id="btnDigupSong">Dig up Song</button>　
   <button id="btnUnlistedToPlaylist">Non-Playlisted to Playlist</button>　
+  <button id="btnSelectToPlaylist">Select to Playlist</button>　
   <button id="btnRefresh" onclick="location.reload();">Refresh</button>
 `;
 
@@ -181,4 +182,74 @@ function ShowDlgSelectPlaylist(j) {
 	
 	return p;
 }
+
+
+// 選択された曲をプレイリストに追加
+// ==============================
+var btnSelectToPlaylist = document.querySelector("#btnSelectToPlaylist");
+btnSelectToPlaylist.addEventListener("click", async function() {
+	btnSelectToPlaylist.disabled = true;
+
+	// Config取得
+	var j = await ApiUtil.GetConfig();
+	
+	// 条件ダイアログ表示
+	var playlist = await ShowDlgSelectPlaylist(j);
+	if (playlist == null) {
+		btnSelectToPlaylist.disabled = false;
+		return;
+	}
+	
+	// 選択曲を、指定プレイリストに追加
+	var knownSongsList = Object.entries(j.Config.KnownSongs);
+	var selectedSongsList = knownSongsList.filter(entry=>ListSelectObserver.selectedHash.has(entry[1].Hash));
+	
+	var addedSongsList = selectedSongsList.filter(entry => playlist.SongList.filter(song => song.Hash == entry[1].Hash).length == 0);
+	addedSongsList.forEach(entry=>{
+		playlist.SongList.push(entry[1]);
+	});
+
+	// Config反映
+	await ApiUtil.PutConfig(j);
+	ListSelectObserver.Refresh();
+	
+	alert("Added " + addedSongsList.length + " songs.");
+	
+	btnSelectToPlaylist.disabled = false;
+});
+
+// 選択された曲のハッシュ値を監視
+var ListSelectObserver = {
+	selectedHash: new Set(),
+	allHash: [],
+	async Refresh() {
+		var j = await ApiUtil.GetConfig();
+		this.allHash = Object.entries(j.Config.KnownSongs).map(i => i[1].Hash);
+		this.selectedHash.clear();
+	},
+	Init() {
+		this.Refresh();
+		setInterval(()=>{
+			if (document.querySelector("input.mat-checkbox-input") == null) { return; }
+			document.querySelectorAll("li[data-song_hash]").forEach(el => {
+				var hash = el.dataset.song_hash;
+				if (el.querySelector("input.mat-checkbox-input").checked) {
+					this.selectedHash.add(hash);
+				} else {
+					this.selectedHash.delete(hash);
+				}
+			});
+		}, 300);
+
+		document.querySelector("i.material-icons[mattooltip*='Select all']").addEventListener("click", ()=>{
+			if (document.querySelector("input.mat-checkbox-input").checked) {
+				this.allHash.forEach(i => this.selectedHash.add(i));
+			} else {
+				this.selectedHash.clear();
+			}
+		});
+	},
+};
+
+ListSelectObserver.Init();
 
