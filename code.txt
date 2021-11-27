@@ -33,7 +33,7 @@ document.querySelector(".outer-container").style.marginTop = "0px";
 // ボタン追加
 document.querySelector("div.title-message").innerHTML = `
   <button id="btnDigupSong">Dig up Song</button>　
-  <button id="btnUnlistedToPlaylist">Unlisted to Playlist</button>　
+  <button id="btnUnlistedToPlaylist">Non-Playlisted to Playlist</button>　
   <button id="btnRefresh" onclick="location.reload();">Refresh</button>
 `;
 
@@ -49,7 +49,7 @@ btnDigupSong.addEventListener("click", async function() {
 	var j = await ApiUtil.GetConfig();
 	
 	// 条件ダイアログ表示
-	var digupCondition = await ShowDigupDialog();
+	var digupCondition = await ShowDlgDigupCondition();
 	if (digupCondition == null) {
 		btnDigupSong.disabled = false;
 		return;
@@ -91,9 +91,9 @@ btnDigupSong.addEventListener("click", async function() {
 });
 
 // 曲を上に移動ダイアログ表示
-function ShowDigupDialog() {
+function ShowDlgDigupCondition() {
 	html=`\
-<div id="dlgShowDigup" style="position: fixed; inset: 0; margin: auto; width:400px; height:min-content; background-color:white; padding:1em; line-height:2em;">
+<div id="dlgDigupCondition" style="position: fixed; inset: 0; margin: auto; width:400px; height:min-content; background-color:white; padding:1em; line-height:2em;">
 	Keyword: <input id="txtKeyword" type="text" style="width:300px;"><br>
 	<label style="background-color:lightgreen;"><input id="chkUnlistedOnly" type="checkbox" checked>Non-Playlisted Only</label><br>
 	<button id="btnDigupOk">Ok</button>　
@@ -102,16 +102,16 @@ function ShowDigupDialog() {
 	document.body.insertAdjacentHTML("beforeend", html);
 	
 	var p = new Promise(resolve=>{
-		document.querySelector("#btnDigupOk").addEventListener("click", async function() {
+		document.querySelector("#btnDigupOk").addEventListener("click", function() {
 			resolve({
 				keyword: document.querySelector("#txtKeyword").value,
 				isUnlistedOnly: document.querySelector("#chkUnlistedOnly").checked
 			});
-			document.querySelector("#dlgShowDigup").remove();
+			document.querySelector("#dlgDigupCondition").remove();
 		});
-		document.querySelector("#btnDigupCancel").addEventListener("click", async function() {
+		document.querySelector("#btnDigupCancel").addEventListener("click", function() {
 			resolve(null);
-			document.querySelector("#dlgShowDigup").remove();
+			document.querySelector("#dlgDigupCondition").remove();
 		});
 	});
 	
@@ -129,7 +129,7 @@ btnUnlistedToPlaylist.addEventListener("click", async function() {
 	var j = await ApiUtil.GetConfig();
 	
 	// 条件ダイアログ表示
-	var playlist = await ShowSelectPlaylist(j);
+	var playlist = await ShowDlgSelectPlaylist(j);
 	if (playlist == null) {
 		btnUnlistedToPlaylist.disabled = false;
 		return;
@@ -154,7 +154,7 @@ btnUnlistedToPlaylist.addEventListener("click", async function() {
 	btnUnlistedToPlaylist.disabled = false;
 });
 
-function ShowSelectPlaylist(j) {
+function ShowDlgSelectPlaylist(j) {
 	html=`\
 <div id="dlgSelectPlaylist" style="position: fixed; inset: 0; margin: auto; width:400px; height:min-content; background-color:white; padding:1em; line-height:2em;">
 	Playlist: <select id="ddlPlaylist">{PLAYLIST_OPTION}</select><br>
