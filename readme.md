@@ -20,23 +20,27 @@ BMBFにプレイリストを整理ための機能を追加する、PC用のChrom
 使い方
 ------------------------------
 
-1. Chromeにこの拡張をインストール
+1. ダウンロード
 
-PCのChromeで「chrome://extensions/」と打ち込んで、拡張機能の管理画面を開いてください。
+  Chrome拡張をダウンロードします。　[Download Link](https://github.com/culage/BMBF_plus/releases/download/v1.0.0/BMBF_plus.zip)
 
-右上のトグルスイッチで「デベロッパーモード」を有効にします。
+2. Chromeにこの拡張をインストール
 
-ダウンロードしたzipをドラッグ＆ドロップでChromeに入れて、拡張をインストールします。
+  PCのChromeで「chrome://extensions/」と打ち込んで、拡張機能の管理画面を開いてください。
+  
+  右上のトグルスイッチで「デベロッパーモード」を有効にします。
+  
+  ダウンロードしたzipをドラッグ＆ドロップでChromeに入れて、拡張をインストールします。
 
-2. BMBFをPCで開く
+3. BMBFをPCで開く
 
-( Toolsタブの「Toggle Running in Background」ボタンでバックグラウンドでBMBFが動くようにしておきます。 )
-
-PCのChromeで「http://(BMBFのToolsタブに書いてあるIP):50000/」を開きます。
-
-Playlistsタブをクリックしてプレイリストを表示し、「F5」キーを押してページを再読込します。
-
-左上に「Dig up Song」などのボタンが追加されていれば成功です。
+  ( Toolsタブの「Toggle Running in Background」ボタンでバックグラウンドでBMBFが動くようにしておきます。 )
+  
+  PCのChromeで「http://(BMBFのToolsタブに書いてあるIP):50000/」を開きます。
+  
+  Playlistsタブをクリックしてプレイリストを表示し、「F5」キーを押してページを再読込します。
+  
+  左上に「Dig up Song」などのボタンが追加されていれば成功です。
 
 
 ### 問題が起きたら…
@@ -75,23 +79,27 @@ Add the following functions.
 How to use
 ------------------------------
 
-1. Install this extension on Chrome
+1. Download
 
-Type "chrome://extensions/" in Chrome to open the extension management screen.
+  Download the Chrome extension.　[Download Link](https://github.com/culage/BMBF_plus/releases/download/v1.0.0/BMBF_plus.zip)
 
-Enable "Developer Mode" with the toggle switch on the top right.
+2. Install this extension on Chrome
 
-Drag and drop the downloaded zip into Chrome and install the extension.
+  Type "chrome://extensions/" in Chrome to open the extension management screen.
+  
+  Enable "Developer Mode" with the toggle switch on the top right.
+  
+  Drag and drop the downloaded zip into Chrome and install the extension.
 
-2. Open BMBF on your PC
+3. Open BMBF on your PC
 
-(Keep the BMBF running in the background with the "Toggle Running in Background" button on the Tools tab.)
-
-Open "http://(IP written in the Tools tab of BMBF):50000/" in Chrome.
-
-Click the Playlists tab to view the playlists and press "F5" to reload the page.
-
-If a button such as "Dig up Song" is added in the upper left, it is successful.
+  (Keep the BMBF running in the background with the "Toggle Running in Background" button on the Tools tab.)
+  
+  Open "http://(IP written in the Tools tab of BMBF):50000/" in Chrome.
+  
+  Click the Playlists tab to view the playlists and press "F5" to reload the page.
+  
+  If a button such as "Dig up Song" is added in the upper left, it is successful.
 
 
 ### If something goes wrong ...
