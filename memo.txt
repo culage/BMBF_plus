@@ -13,10 +13,17 @@ PCのBMBF画面の右パネルで上のほうに「未プレイリスト曲」�
 *	・プレイリストに無い曲には色をつける　※緑色にする
 -	・上にサーバ起動しっぱなしのトグルがあることを書く
 	
-	chrome拡張にする
-	http://192.168.2.104:50000/main/playlists
+*	chrome拡張にする
+*	http://192.168.2.104:50000/main/playlists
+	
+	readme.mdを追加
+	readme.en.mdを追加
+	
+	git push
+	リリース
 	
 	discord BMBFch 報告
+	2ch報告
 
 
 曲バックアップスクリプト
