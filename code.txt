@@ -28,37 +28,90 @@ document.querySelector(".outer-container").style.marginTop = "0px";
 
 // 機能UI追加
 document.querySelector("div.title-message").innerHTML = `
-  <button id="btnDigupUnlist">Dig up Unlist</button>　
+  <button id="btnDigupSong">Dig up Song</button>　
   <button id="btnRefresh" onclick="location.reload();">Refresh</button>
 `;
 
-// プレイリスト未登録曲を上に移動
-var btnDigupUnlist = document.querySelector("#btnDigupUnlist");
-btnDigupUnlist.addEventListener("click", async function() {
+// 曲を上に移動
+var btnDigupSong = document.querySelector("#btnDigupSong");
+btnDigupSong.addEventListener("click", async function() {
 	
-	btnDigupUnlist.disabled = true;
+	btnDigupSong.disabled = true;
 	
 	// Config取得
 	var j = await GetConfigApi();
 	
+	// 条件ダイアログ表示
+	var digupCondition = await ShowDigupDialog();
+	if (digupCondition == null) {
+		btnDigupSong.disabled = false;
+		return;
+	}
+	
 	// プレイリスト未登録曲を上に移動
-	var playlistHashSet = new Set( j.Config.Playlists.flatMap(playlist=>playlist.SongList.map(song=>song.Hash)) );
-
 	var knownSongsList = Object.entries(j.Config.KnownSongs);
-	var listedSongsList  = knownSongsList.filter(entry=> playlistHashSet.has(entry[1].Hash));
-	var unlistedSongList = knownSongsList.filter(entry=>!playlistHashSet.has(entry[1].Hash));
-	var newKnownSongs = listedSongsList;
-	newKnownSongs.unshift(...unlistedSongList);
+	
+	var digupSongsList = knownSongsList.filter(entry=>true); // copy
+	if (digupCondition.keyword != "") {
+		var k = digupCondition.keyword.toLowerCase();
+		digupSongsList = digupSongsList.filter(entry=>{
+			if (entry[1].Hash.toLowerCase().includes(k) == true) { return true; }
+			if (entry[1].SongName.toLowerCase().includes(k) == true) { return true; }
+			if (entry[1].SongSubName.toLowerCase().includes(k) == true) { return true; }
+			if (entry[1].SongAuthorName.toLowerCase().includes(k) == true) { return true; }
+			if (entry[1].LevelAuthorName.toLowerCase().includes(k) == true) { return true; }
+			return false;
+		});
+	}
+	if (digupCondition.isUnlistedOnly == true) {
+		var playlistHashSet = new Set( j.Config.Playlists.flatMap(playlist=>playlist.SongList.map(song=>song.Hash)) );
+		digupSongsList = digupSongsList.filter(entry=>!playlistHashSet.has(entry[1].Hash));
+	}
+	
+	var digupSongsHashSet = new Set( digupSongsList.map(entry=>entry[1].Hash) );
+	var notDigupSongsList  = knownSongsList.filter(entry=>!digupSongsHashSet.has(entry[1].Hash));
+	var newKnownSongs = notDigupSongsList;
+	newKnownSongs.unshift(...digupSongsList);
 
 	j.Config.KnownSongs = Object.fromEntries(newKnownSongs);
 
 	// Config反映
 	await PutConfigApi(j);
 	
-	alert("Dig up " + unlistedSongList.length + " songs.");
+	alert("Dig up " + digupSongsList.length + " songs.");
 	
-	btnDigupUnlist.disabled = false;
+	btnDigupSong.disabled = false;
 });
+
+// 曲を上に移動ダイアログ表示
+function ShowDigupDialog() {
+	html=`\
+<div id="dlgShowDigup" style="position: fixed; inset: 0; margin: auto; width:400px; height:min-content; background-color:white; padding:1em; line-height:2em;">
+	Keyword: <input id="txtKeyword" type="text" style="width:300px;"><br>
+	<label style="background-color:lightgreen;"><input id="chkUnlistedOnly" type="checkbox" checked>Non-Playlisted Only</label><br>
+	<button id="btnDigupOk">Ok</button>　
+	<button id="btnDigupCancel">Cancel</button>
+</div>`;
+	document.body.insertAdjacentHTML("beforeend", html);
+	
+	var p = new Promise(resolve=>{
+		document.querySelector("#btnDigupOk").addEventListener("click", async function() {
+			resolve({
+				keyword: document.querySelector("#txtKeyword").value,
+				isUnlistedOnly: document.querySelector("#chkUnlistedOnly").checked
+			});
+			document.querySelector("#dlgShowDigup").remove();
+		});
+		document.querySelector("#btnDigupCancel").addEventListener("click", async function() {
+			resolve(null);
+			document.querySelector("#dlgShowDigup").remove();
+		});
+	});
+	
+	return p;
+};
+
+
 
 //Unlisted to Playlist ・未プレイリスト曲をプレイリストに追加する
 //取得api
