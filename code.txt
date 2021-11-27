@@ -27,13 +27,13 @@ var ApiUtil = {
 
 // UI追加
 // ==============================
-
 // 曲リスト位置調整
 document.querySelector(".outer-container").style.marginTop = "0px";
 
 // ボタン追加
 document.querySelector("div.title-message").innerHTML = `
   <button id="btnDigupSong">Dig up Song</button>　
+  <button id="btnUnlistedToPlaylist">Unlisted to Playlist</button>　
   <button id="btnRefresh" onclick="location.reload();">Refresh</button>
 `;
 
@@ -119,11 +119,66 @@ function ShowDigupDialog() {
 };
 
 
+// 未プレイリスト曲をプレイリストに追加
+// ==============================
+var btnUnlistedToPlaylist = document.querySelector("#btnUnlistedToPlaylist");
+btnUnlistedToPlaylist.addEventListener("click", async function() {
+	btnUnlistedToPlaylist.disabled = true;
 
-//Unlisted to Playlist ・未プレイリスト曲をプレイリストに追加する
-//取得api
-//playlist = await ウインドウが閉じられるまで
-//if (playlist == null) { return; }
-//playlist追加
-//更新api
+	// Config取得
+	var j = await ApiUtil.GetConfig();
+	
+	// 条件ダイアログ表示
+	var playlist = await ShowSelectPlaylist(j);
+	if (playlist == null) {
+		btnUnlistedToPlaylist.disabled = false;
+		return;
+	}
+	
+	// プレイリスト未登録曲を、指定プレイリストに追加
+	var knownSongsList = Object.entries(j.Config.KnownSongs);
+	
+	var playlistHashSet = new Set( j.Config.Playlists.flatMap(playlist=>playlist.SongList.map(song=>song.Hash)) );
+	var unlitedSongsList = knownSongsList.filter(entry=>!playlistHashSet.has(entry[1].Hash));
+	
+	var addedSongsList = unlitedSongsList.filter(entry => playlist.SongList.filter(song => song.Hash == entry[1].Hash).length == 0);
+	addedSongsList.forEach(entry=>{
+		playlist.SongList.push(entry[1]);
+	});
+
+	// Config反映
+	await ApiUtil.PutConfig(j);
+	
+	alert("Added " + addedSongsList.length + " songs.");
+	
+	btnUnlistedToPlaylist.disabled = false;
+});
+
+function ShowSelectPlaylist(j) {
+	html=`\
+<div id="dlgSelectPlaylist" style="position: fixed; inset: 0; margin: auto; width:400px; height:min-content; background-color:white; padding:1em; line-height:2em;">
+	Playlist: <select id="ddlPlaylist">{PLAYLIST_OPTION}</select><br>
+	<button id="btnSelectOk">Ok</button>　
+	<button id="btnSelectCancel">Cancel</button>
+</div>`;
+
+	var playlistOption = j.Config.Playlists.map(playlist => `<option>${playlist.PlaylistName}</option>`).join();
+	html = html.replace("{PLAYLIST_OPTION}", playlistOption);
+
+	document.body.insertAdjacentHTML("beforeend", html);
+	
+	var p = new Promise(resolve=>{
+		document.querySelector("#btnSelectOk").addEventListener("click", function() {
+			var index = document.querySelector("#ddlPlaylist").selectedIndex;
+			resolve(j.Config.Playlists[index]);
+			document.querySelector("#dlgSelectPlaylist").remove();
+		});
+		document.querySelector("#btnSelectCancel").addEventListener("click", function() {
+			resolve(null);
+			document.querySelector("#dlgSelectPlaylist").remove();
+		});
+	});
+	
+	return p;
+}
 

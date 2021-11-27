@@ -1,14 +1,18 @@
 ■todo
 BMBF_1_15_Ext
 PCのBMBF画面の右パネルで上のほうに「未プレイリスト曲」を持ってくる
-	・Dig up Song
-		keyword: [          ]
-		[*] Not included in playlist　※緑色にする
-		
-		Dig up Unlisted	・未プレイリスト曲を上に持ってくる
-			（分かりやすい区切りとなる曲を指定してそれも上にもってくる？
-		Dig up by text ・タイトル・作者フィルタで上に持ってくる
+*	・Dig up Song
+*		keyword: [          ]
+*		[*] Not included in playlist　※緑色にする
+*		
+*		Dig up Unlisted	・未プレイリスト曲を上に持ってくる
+*			（分かりやすい区切りとなる曲を指定してそれも上にもってくる？
+*		Dig up by text ・タイトル・作者フィルタで上に持ってくる
 	・Unlisted to Playlist ・未プレイリスト曲をプレイリストに追加する
+
+dlgDigupCondition……に名前を変更
+ダイアログイベントハンドラはasyncの必要なし
+
 	・Select to Playlist ・選択した曲　　　をプレイリストに追加する
 	・プレイリストに無い曲には色をつける　※緑色にする
 	・上にサーバ起動しっぱなしのトグルがあることを書く
