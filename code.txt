@@ -1,45 +1,52 @@
 //■実コード
 
-//★ApiUtil = {
-const CONFIG_API_URL = "/host/beatsaber/config";
+// ApiUtil
+// ==============================
+var ApiUtil = {
+	CONFIG_API_URL: "/host/beatsaber/config",
+	// Config取得
+	async GetConfig() {
+		var response = await fetch(this.CONFIG_API_URL, {
+			method: 'GET',
+			cache: 'no-cache',
+		});
+		return await response.json();
+	},
+	// Config反映
+	async PutConfig(putJson) {
+		return await fetch(this.CONFIG_API_URL, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(putJson.Config)
+		});
+	}
+};
 
-// Config取得
-async function GetConfigApi() {
-	var response = await fetch(CONFIG_API_URL, {
-		method: 'GET',
-		cache: 'no-cache',
-	});
-	return await response.json();
-}
 
-// Config反映
-async function PutConfigApi(putJson) {
-	return await fetch(CONFIG_API_URL, {
-		method: 'PUT',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(putJson.Config)
-	});
-}
+// UI追加
+// ==============================
 
 // 曲リスト位置調整
 document.querySelector(".outer-container").style.marginTop = "0px";
 
-// 機能UI追加
+// ボタン追加
 document.querySelector("div.title-message").innerHTML = `
   <button id="btnDigupSong">Dig up Song</button>　
   <button id="btnRefresh" onclick="location.reload();">Refresh</button>
 `;
 
+
 // 曲を上に移動
+// ==============================
 var btnDigupSong = document.querySelector("#btnDigupSong");
 btnDigupSong.addEventListener("click", async function() {
 	
 	btnDigupSong.disabled = true;
 	
 	// Config取得
-	var j = await GetConfigApi();
+	var j = await ApiUtil.GetConfig();
 	
 	// 条件ダイアログ表示
 	var digupCondition = await ShowDigupDialog();
@@ -76,7 +83,7 @@ btnDigupSong.addEventListener("click", async function() {
 	j.Config.KnownSongs = Object.fromEntries(newKnownSongs);
 
 	// Config反映
-	await PutConfigApi(j);
+	await ApiUtil.PutConfig(j);
 	
 	alert("Dig up " + digupSongsList.length + " songs.");
 	
