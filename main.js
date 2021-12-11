@@ -120,6 +120,8 @@ function main() {
 	</div>`;
 		document.body.insertAdjacentHTML("beforeend", html);
 		
+		document.querySelector("#txtKeyword").focus();
+		
 		var p = new Promise(resolve=>{
 			document.querySelector("#btnDigupOk").addEventListener("click", function() {
 				resolve({
