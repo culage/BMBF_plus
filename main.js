@@ -50,7 +50,7 @@ function main() {
 
 	// ボタン追加
 	document.querySelector("div.title-message").innerHTML = `
-	  <button id="btnDigupSong">Dig up Song</button>　
+	  <button id="btnDigupSong">Dig up and Sort</button>　
 	  <button id="btnUnlistedToPlaylist">Non-Playlisted to Playlist</button>　
 	  <button id="btnSelectToPlaylist">Select to Playlist</button>　
 	  <button id="btnRefresh" onclick="location.reload();">Refresh</button>
@@ -93,6 +93,9 @@ function main() {
 			var playlistHashSet = new Set( j.Config.Playlists.flatMap(playlist=>playlist.SongList.map(song=>song.Hash)) );
 			digupSongsList = digupSongsList.filter(entry=>!playlistHashSet.has(entry[1].Hash));
 		}
+		
+		// 並び替え
+		digupSongsList.sort((e1, e2) => e1[1].SongName.toLowerCase() < e2[1].SongName.toLowerCase() ? -1 : +1);
 		
 		var digupSongsHashSet = new Set( digupSongsList.map(entry=>entry[1].Hash) );
 		var notDigupSongsList  = knownSongsList.filter(entry=>!digupSongsHashSet.has(entry[1].Hash));
