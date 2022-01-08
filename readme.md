@@ -22,7 +22,7 @@ BMBFにプレイリストを整理ための機能を追加する、PC用のChrom
 
 1. ダウンロード
 
-  Chrome拡張をダウンロードします。　[Download Link](https://github.com/culage/BMBF_plus/releases/download/v1.0.0/BMBF_plus.zip)
+  Chrome拡張をダウンロードします。　[ここから最新の BMBF_plus.zip をダウンロード](https://github.com/culage/BMBF_plus/releases)
 
 2. Chromeにこの拡張をインストール
 
@@ -81,7 +81,7 @@ How to use
 
 1. Download
 
-  Download the Chrome extension.　[Download Link](https://github.com/culage/BMBF_plus/releases/download/v1.0.0/BMBF_plus.zip)
+  Download the Chrome extension.　[Download BMBF_plus.zip](https://github.com/culage/BMBF_plus/releases)
 
 2. Install this extension on Chrome
 
